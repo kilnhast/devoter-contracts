@@ -33,24 +33,12 @@ This project follows a standard Hardhat project structure:
     pnpm install
     ```
 
-### Installation
-
-1.  **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/devoter-xyz/devoter-contracts.git
-    cd devoter-contracts
-    ```
-
-2.  **Install dependencies:**
-
-    ```bash
-    pnpm install
-    ```
-
-## Environment Variables and Security
-
-This project uses environment variables to manage sensitive information like private keys and RPC URLs. This is a crucial security measure to prevent exposing your keys.
+## Environment Variables
+To run this project, you will need to add the following environment variables to your .env file
+`PRIVATE_KEY`
+`BASE_MAINNET_RPC_URL`
+`BASE_SEPOLIA_RPC_URL`
+`ANKR_API_KEY`
 
 1.  **Create a `.env` file:**
 
@@ -78,7 +66,12 @@ This project uses environment variables to manage sensitive information like pri
 -   **Compile contracts:**
 
     ```bash
-    pnpm hardhat compile
+    pnpm compile
+    ```
+
+-   **Check network connection:**
+    ```bash
+    pnpm check-connection
     ```
 
 -   **Run tests:**
