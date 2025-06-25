@@ -1,7 +1,8 @@
 {
   "name": "hardhat-project",
   "scripts": {
-    "compile": "hardhat compile"
+    "compile": "hardhat compile",
+    "check-connection": "hardhat run scripts/checkConnection.ts --network base-sepolia"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^6.0.0",
