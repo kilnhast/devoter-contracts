@@ -1,8 +1,8 @@
-# devoter-contracts
+# Devoter Contracts 🗳️
 
 Custom Solidity contracts for the devoter-app, built with Hardhat.
 
-## Project Structure
+## 📁 Project Structure
 
 This project follows a standard Hardhat project structure:
 
@@ -13,14 +13,14 @@ This project follows a standard Hardhat project structure:
 - `ignition/`: Holds the deployment scripts for Hardhat Ignition.
 - `hardhat.config.ts`: The main Hardhat configuration file.
 
-## Setup Instructions
+## 🚀 Setup Instructions
 
-### Prerequisites
+### 🛠️ Prerequisites
 
 - [Node.js](https://nodejs.org/en/) (v18 or later)
 - [pnpm](https://pnpm.io/) or [npm](https://www.npmjs.com/)
 
-### Installation
+### 📦 Installation
 
 1. **Clone the repository:**
     ```bash
@@ -47,77 +47,77 @@ This project follows a standard Hardhat project structure:
     npm run compile
     ```
 
-## Available Commands
+## 📝 Available Commands
 
-- **Compile contracts:**
+- **🛠️ Compile contracts:**
   ```bash
   pnpm compile
   # or
   npm run compile
   ```
-- **Run tests:**
+- **🧪 Run tests:**
   ```bash
   pnpm test
   # or
   npm test
   ```
-- **Run tests with gas reporting:**
+- **⛽ Run tests with gas reporting:**
   ```bash
   pnpm test:gas
   # or
   npm run test:gas
   ```
-- **Deploy to Base Sepolia testnet:**
+- **🚀 Deploy to Base Sepolia testnet:**
   ```bash
   pnpm deploy:sepolia
   # or
   npm run deploy:sepolia
   ```
-- **Deploy to Base Mainnet:**
+- **🚀 Deploy to Base Mainnet:**
   ```bash
   pnpm deploy:mainnet
   # or
   npm run deploy:mainnet
   ```
-- **Verify contract on Base Sepolia:**
+- **🔍 Verify contract on Base Sepolia:**
   ```bash
   pnpm verify
   # or
   npm run verify
   ```
-- **Clean build artifacts:**
+- **🧹 Clean build artifacts:**
   ```bash
   pnpm clean
   # or
   npm run clean
   ```
-- **Start local Hardhat node:**
+- **🖧 Start local Hardhat node:**
   ```bash
   pnpm node
   # or
   npm run node
   ```
-- **Check network connection:**
+- **🌐 Check network connection:**
   ```bash
   pnpm check-connection
   # or
   npm run check-connection
   ```
 
-## Development Workflow
+## 🔄 Development Workflow
 
 1. **Install dependencies and set up environment variables** as described above.
-2. **Compile contracts** after making changes:
+2. **🛠️ Compile contracts** after making changes:
     ```bash
     npm run compile
     ```
-3. **Write and run tests** in the `test/` directory:
+3. **🧪 Write and run tests** in the `test/` directory:
     ```bash
     npm test
     # or with gas reporting
     npm run test:gas
     ```
-4. **Deploy contracts** to your desired network:
+4. **🚀 Deploy contracts** to your desired network:
     - For Base Sepolia:
       ```bash
       npm run deploy:sepolia
@@ -126,15 +126,15 @@ This project follows a standard Hardhat project structure:
       ```bash
       npm run deploy:mainnet
       ```
-5. **Verify contracts** (after deployment):
+5. **🔍 Verify contracts** (after deployment):
     ```bash
     npm run verify
     ```
-6. **Start a local node** for local development:
+6. **🖧 Start a local node** for local development:
     ```bash
     npm run node
     ```
-7. **Clean build artifacts** when needed:
+7. **🧹 Clean build artifacts** when needed:
     ```bash
     npm run clean
     ```
