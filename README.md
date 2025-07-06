@@ -13,78 +13,133 @@ This project follows a standard Hardhat project structure:
 - `ignition/`: Holds the deployment scripts for Hardhat Ignition.
 - `hardhat.config.ts`: The main Hardhat configuration file.
 
-## Getting Started
+## Setup Instructions
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/en/) (v18 or later)
-- [pnpm](https://pnpm.io/)
+- [pnpm](https://pnpm.io/) or [npm](https://www.npmjs.com/)
 
 ### Installation
 
-1.  **Clone the repository:**
-
+1. **Clone the repository:**
     ```bash
     git clone https://github.com/devoter-xyz/devoter-contracts.git
     cd devoter-contracts
     ```
-
-2.  **Install dependencies:**
-
+2. **Install dependencies:**
     ```bash
     pnpm install
+    # or
+    npm install
     ```
-
-## Environment Variables
-To run this project, you will need to add the following environment variables to your .env file
-`PRIVATE_KEY`
-`BASE_MAINNET_RPC_URL`
-`BASE_SEPOLIA_RPC_URL`
-`ANKR_API_KEY`
-
-1.  **Create a `.env` file:**
-
-    Make a copy of the `.env.example` file and name it `.env`:
-
+3. **Copy environment variables template:**
     ```bash
     cp .env.example .env
     ```
+4. **Configure environment variables:**
+    - Edit `.env` and fill in your `PRIVATE_KEY`, `BASE_MAINNET_RPC_URL`, `BASE_SEPOLIA_RPC_URL`, and `ANKR_API_KEY`.
 
-2.  **Populate the `.env` file:**
-
-    Open the `.env` file and add your private key and RPC URLs.
-
-    ```
-    PRIVATE_KEY=your_metamask_private_key_here
-    BASE_MAINNET_RPC_URL=https://mainnet.base.org
-    BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
-    ANKR_API_KEY=your_ankr_key_here
-    ```
-
-    **IMPORTANT:** The `.env` file is included in `.gitignore` and should **never** be committed to version control.
-
-### Available Commands
-
--   **Compile contracts:**
-
+5. **Test setup:**
     ```bash
     pnpm compile
+    # or
+    npm run compile
     ```
 
--   **Check network connection:**
+## Available Commands
+
+- **Compile contracts:**
+  ```bash
+  pnpm compile
+  # or
+  npm run compile
+  ```
+- **Run tests:**
+  ```bash
+  pnpm test
+  # or
+  npm test
+  ```
+- **Run tests with gas reporting:**
+  ```bash
+  pnpm test:gas
+  # or
+  npm run test:gas
+  ```
+- **Deploy to Base Sepolia testnet:**
+  ```bash
+  pnpm deploy:sepolia
+  # or
+  npm run deploy:sepolia
+  ```
+- **Deploy to Base Mainnet:**
+  ```bash
+  pnpm deploy:mainnet
+  # or
+  npm run deploy:mainnet
+  ```
+- **Verify contract on Base Sepolia:**
+  ```bash
+  pnpm verify
+  # or
+  npm run verify
+  ```
+- **Clean build artifacts:**
+  ```bash
+  pnpm clean
+  # or
+  npm run clean
+  ```
+- **Start local Hardhat node:**
+  ```bash
+  pnpm node
+  # or
+  npm run node
+  ```
+- **Check network connection:**
+  ```bash
+  pnpm check-connection
+  # or
+  npm run check-connection
+  ```
+
+## Development Workflow
+
+1. **Install dependencies and set up environment variables** as described above.
+2. **Compile contracts** after making changes:
     ```bash
-    pnpm check-connection
+    npm run compile
     ```
-
--   **Run tests:**
-
+3. **Write and run tests** in the `test/` directory:
     ```bash
-    pnpm hardhat test
+    npm test
+    # or with gas reporting
+    npm run test:gas
     ```
-
--   **Deploy contracts (to a local network):**
-
+4. **Deploy contracts** to your desired network:
+    - For Base Sepolia:
+      ```bash
+      npm run deploy:sepolia
+      ```
+    - For Base Mainnet:
+      ```bash
+      npm run deploy:mainnet
+      ```
+5. **Verify contracts** (after deployment):
     ```bash
-    pnpm hardhat ignition deploy ignition/modules/Lock.ts --network localhost
+    npm run verify
     ```
+6. **Start a local node** for local development:
+    ```bash
+    npm run node
+    ```
+7. **Clean build artifacts** when needed:
+    ```bash
+    npm run clean
+    ```
+
+---
+
+**Note:** All scripts support both `npm` and `pnpm` as package managers.
 

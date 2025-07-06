@@ -2,6 +2,13 @@
   "name": "hardhat-project",
   "scripts": {
     "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:gas": "REPORT_GAS=true hardhat test",
+    "deploy:sepolia": "hardhat ignition deploy ignition/modules/Lock.ts --network base-sepolia",
+    "deploy:mainnet": "hardhat ignition deploy ignition/modules/Lock.ts --network base-mainnet",
+    "verify": "hardhat verify --network base-sepolia",
+    "clean": "hardhat clean",
+    "node": "hardhat node",
     "check-connection": "hardhat run scripts/checkConnection.ts --network base-sepolia"
   },
   "devDependencies": {
