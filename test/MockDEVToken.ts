@@ -4,11 +4,12 @@ import {
 } from "@nomicfoundation/hardhat-toolbox-viem/network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
-import { getAddress, parseGwei } from "viem";
+import { getAddress, parseGwei, parseEther } from "viem";
 
 describe("MockDEVToken", function () {
   async function deployMockDEVTokenFixture() {
-    const [owner, otherAccount] = await hre.viem.getWalletClients();
+    const [owner, otherAccount, thirdAccount] =
+      await hre.viem.getWalletClients();
 
     const mockDEVToken = await hre.viem.deployContract("MockDEVToken", [
       getAddress(owner.account.address),
@@ -22,9 +23,72 @@ describe("MockDEVToken", function () {
       mockDEVToken,
       owner,
       otherAccount,
+      thirdAccount,
       publicClient,
     };
   }
+
+  describe("Deployment", function () {
+    it("Should set the correct name and symbol", async function () {
+      const { mockDEVToken } = await loadFixture(deployMockDEVTokenFixture);
+      expect(await mockDEVToken.read.name()).to.equal("Mock DEV Token");
+      expect(await mockDEVToken.read.symbol()).to.equal("mDEV");
+    });
+
+    it("Should mint the initial supply to the owner", async function () {
+      const { mockDEVToken, owner } = await loadFixture(
+        deployMockDEVTokenFixture
+      );
+      const expectedSupply = parseEther("1000000");
+      expect(
+        await mockDEVToken.read.balanceOf([getAddress(owner.account.address)])
+      ).to.equal(expectedSupply);
+    });
+  });
+
+  describe("Minting", function () {
+    it("Should allow the owner to mint tokens", async function () {
+      const { mockDEVToken, otherAccount } = await loadFixture(
+        deployMockDEVTokenFixture
+      );
+      const mintAmount = parseEther("1000");
+      await mockDEVToken.write.mintTo([
+        getAddress(otherAccount.account.address),
+        mintAmount,
+      ]);
+      expect(
+        await mockDEVToken.read.balanceOf([
+          getAddress(otherAccount.account.address),
+        ])
+      ).to.equal(mintAmount);
+    });
+
+    it("Should not allow a non-owner to mint tokens", async function () {
+      const { mockDEVToken, otherAccount, thirdAccount } = await loadFixture(
+        deployMockDEVTokenFixture
+      );
+      const mintAmount = parseEther("1000");
+      await expect(
+        mockDEVToken.write.mintTo(
+          [getAddress(thirdAccount.account.address), mintAmount],
+          {
+            account: otherAccount.account,
+          }
+        )
+      ).to.be.rejectedWith("ERC20: caller is not authorized to mint");
+    });
+
+    it("Should not allow minting to the zero address", async function () {
+      const { mockDEVToken } = await loadFixture(deployMockDEVTokenFixture);
+      const mintAmount = parseEther("1000");
+      await expect(
+        mockDEVToken.write.mintTo([
+          "0x0000000000000000000000000000000000000000",
+          mintAmount,
+        ])
+      ).to.be.rejectedWith("ERC20: mint to the zero address");
+    });
+  });
 
   describe("Delegation", function () {
     it("Should allow a user to delegate their voting power to themselves", async function () {
