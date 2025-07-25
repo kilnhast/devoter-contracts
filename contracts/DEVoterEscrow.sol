@@ -2,10 +2,13 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract DEVoterEscrow is ReentrancyGuard, Ownable {
+    using SafeERC20 for IERC20;
+
     IERC20 public immutable token;
     address public feeWallet;
     uint256 public feePercentage;
@@ -88,6 +91,27 @@ contract DEVoterEscrow is ReentrancyGuard, Ownable {
     function updateReleaseTimestamp(address user, uint256 newReleaseTimestamp) external onlyOwner {
         require(escrows[user].isActive, "No active escrow for this user");
         escrows[user].releaseTimestamp = newReleaseTimestamp;
+    }
+
+    function escrowTokensForVoting(uint256 amount) external nonReentrant {
+        require(amount > 0, "Amount must be greater than 0");
+        require(!hasActiveEscrow[msg.sender], "User already has active escrow");
+
+        token.safeTransferFrom(msg.sender, address(this), amount);
+
+        uint256 releaseTimestamp = block.timestamp + ESCROW_DURATION;
+
+        userEscrows[msg.sender] = EscrowData({
+            amount: amount,
+            depositTimestamp: block.timestamp,
+            releaseTimestamp: releaseTimestamp,
+            isActive: true,
+            votesCast: 0
+        });
+
+        hasActiveEscrow[msg.sender] = true;
+
+        emit TokensDeposited(msg.sender, amount, releaseTimestamp);
     }
 
     function getFeeWallet() external view returns (address) {
