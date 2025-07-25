@@ -23,7 +23,14 @@ contract DEVoterEscrow is ReentrancyGuard, Ownable {
 
     mapping(address => EscrowData) public escrows;
 
-    constructor(address _tokenAddress, address _feeWallet, uint256 _feePercentage, uint256 _votingPeriod) Ownable() {
+    event TokensDeposited(address indexed user, uint256 amount, uint256 releaseTimestamp);
+
+    constructor(
+        address _tokenAddress,
+        address _feeWallet,
+        uint256 _feePercentage,
+        uint256 _votingPeriod
+    ) Ownable() {
         token = IERC20(_tokenAddress);
         feeWallet = _feeWallet;
         feePercentage = _feePercentage;
@@ -48,6 +55,8 @@ contract DEVoterEscrow is ReentrancyGuard, Ownable {
             depositTimestamp: block.timestamp,
             releaseTimestamp: calculateReleaseTimestamp(block.timestamp)
         });
+
+        emit TokensDeposited(msg.sender, amountToEscrow, escrows[msg.sender].releaseTimestamp);
     }
 
     function release() external nonReentrant {
@@ -91,27 +100,6 @@ contract DEVoterEscrow is ReentrancyGuard, Ownable {
     function updateReleaseTimestamp(address user, uint256 newReleaseTimestamp) external onlyOwner {
         require(escrows[user].isActive, "No active escrow for this user");
         escrows[user].releaseTimestamp = newReleaseTimestamp;
-    }
-
-    function escrowTokensForVoting(uint256 amount) external nonReentrant {
-        require(amount > 0, "Amount must be greater than 0");
-        require(!hasActiveEscrow[msg.sender], "User already has active escrow");
-
-        token.safeTransferFrom(msg.sender, address(this), amount);
-
-        uint256 releaseTimestamp = block.timestamp + ESCROW_DURATION;
-
-        userEscrows[msg.sender] = EscrowData({
-            amount: amount,
-            depositTimestamp: block.timestamp,
-            releaseTimestamp: releaseTimestamp,
-            isActive: true,
-            votesCast: 0
-        });
-
-        hasActiveEscrow[msg.sender] = true;
-
-        emit TokensDeposited(msg.sender, amount, releaseTimestamp);
     }
 
     function getFeeWallet() external view returns (address) {

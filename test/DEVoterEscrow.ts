@@ -5,6 +5,7 @@ import {
 import { expect } from "chai";
 import hre from "hardhat";
 import { getAddress, parseEther } from "viem";
+import "@nomicfoundation/hardhat-viem/types";
 
 describe("DEVoterEscrow", function () {
   async function deployContractsFixture() {
@@ -98,8 +99,8 @@ describe("DEVoterEscrow", function () {
 
       expect(escrow[0]).to.be.true; // isActive
       expect(escrow[1]).to.equal(escrowedAmount); // amount
-      expect(escrow[2]).to.be.above(0n); // depositTimestamp
-      expect(escrow[3]).to.be.above(escrow[2]); // releaseTimestamp
+      expect(escrow[2] > 0n).to.be.true; // depositTimestamp
+      expect(escrow[3] > escrow[2]).to.be.true; // releaseTimestamp
 
       expect(await mockDEVToken.read.balanceOf([userAddress])).to.equal(
         userInitialBalance - depositAmount
@@ -183,8 +184,15 @@ describe("DEVoterEscrow", function () {
       await dEVoterEscrow.write.deposit([depositAmount], { account: user.account });
 
       expect(await dEVoterEscrow.read.isVotingPeriodActive([userAddress])).to.be.true;
-      const remainingTime = await dEVoterEscrow.read.getRemainingVotingTime([userAddress]);
-      expect(remainingTime).to.be.closeTo(BigInt(votingPeriod), 2n);
+      const remainingTime = await dEVoterEscrow.read.getRemainingVotingTime([
+        userAddress,
+      ]);
+      const expectedReleaseTime = BigInt(votingPeriod);
+      const tolerance = 2n; // Allow a 2-second tolerance
+      expect(
+        remainingTime >= expectedReleaseTime - tolerance &&
+          remainingTime <= expectedReleaseTime + tolerance
+      ).to.be.true;
 
       const escrow = await dEVoterEscrow.read.escrows([userAddress]);
       await time.increaseTo(escrow[3]);
